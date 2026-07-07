@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章宇涵我爱你</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff6a88, #ff99ac);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .love-text {
+            font-size: 52px;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+            animation: beat 1.4s infinite;
+            z-index: 99;
+        }
+        @keyframes beat {
+            0%,100% {transform: scale(1);}
+            50% {transform: scale(1.06);}
+        }
+        .heart {
+            position: fixed;
+            color: #fff;
+            font-size: 24px;
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(-5%) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="love-text">章宇涵 我爱你❤️</div>
+
+    <script>
+        // 持续飘落爱心
+        function createHeart(){
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.className = 'heart';
+            heart.style.left = Math.random()*100 + 'vw';
+            heart.style.animationDuration = Math.random()*3+2+'s';
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),5000);
+        }
+        setInterval(createHeart,300);
+
+        // 自动持续燃放烟花，无需点击
+        const colors = ['#fff','#ffd700','#ff6b81','#a8e6cf','#fffa86'];
+        function autoFirework(){
+            // 随机烟花位置
+            let x = Math.random() * window.innerWidth;
+            let y = Math.random() * window.innerHeight * 0.6;
+            for(let i=0;i<40;i++){
+                let span = document.createElement('span');
+                let angle = (Math.PI*2/40)*i;
+                let speed = Math.random()*80+50;
+                span.style.cssText = `
+                    position:fixed;
+                    width:6px;height:6px;
+                    background:${colors[Math.floor(Math.random()*colors.length)]};
+                    border-radius:50%;
+                    left:${x}px;top:${y}px;
+                    pointer-events:none;
+                `;
+                document.body.appendChild(span);
+                let sx = Math.cos(angle)*speed;
+                let sy = Math.sin(angle)*speed;
+                let frame = 0;
+                function animate(){
+                    frame++;
+                    span.style.left = x + sx*frame + 'px';
+                    span.style.top = y + sy*frame + frame*0.3 + 'px';
+                    span.style.opacity = 1-frame/60;
+                    if(frame<60) requestAnimationFrame(animate);
+                    else span.remove();
+                }
+                animate();
+            }
+        }
+        // 每隔1.8秒自动放烟花
+        setInterval(autoFirework, 1800);
+    </script>
+</body>
+</html>
